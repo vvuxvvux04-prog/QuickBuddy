@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>QuickBuddy Partner — Mechanic App</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2300C97B'/%3E%3Cpath d='M40 10l-2.5-4h-5L30 10a14 14 0 0 0-4 2.5l-5-.8-2.5 4.3 3.2 4A14 14 0 0 0 21 24a14 14 0 0 0 .2 4l-3.2 4 2.5 4.3 5-.8A14 14 0 0 0 30 38l2.5 4h5L40 38a14 14 0 0 0 4-2.5l5 .8 2.5-4.3-3.2-4A14 14 0 0 0 48.5 24a14 14 0 0 0-.2-4l3.2-4-2.5-4.3-5 .8A14 14 0 0 0 40 10z' fill='%23fff'/%3E%3Ccircle cx='37' cy='24' r='6' fill='%2300C97B'/%3E%3Crect x='24' y='30' width='20' height='5' rx='2.5' transform='rotate(45 34 32.5)' fill='%23fff'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#00C97B;--gd:#00A865;--gl:#E6FBF2;
+  --y:#FFC107;--yl:#FFF8E1;
+  --blk:#111;--blk2:#1E1E1E;--blk3:#2C2C2C;
+  --red:#FF4444;--redl:#FFF0F0;
+  --bg:#F6F7F9;--card:#fff;
+  --mute:#888;--border:#EBEBEB;
+  --r:14px;--rlg:20px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--blk);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+.screen{display:none}.screen.active{display:block;animation:up .3s ease}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.page{display:none;animation:up .25s ease}.page.active{display:block}
+
+/* ══ SPLASH ══ */
+.splash{min-height:100vh;background:var(--g);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.splash::before{content:'';position:absolute;width:350px;height:350px;border-radius:50%;background:rgba(255,255,255,.08);top:-80px;right:-80px}
+.splash::after{content:'';position:absolute;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.05);bottom:-60px;left:-60px}
+.sp-icon{width:100px;height:100px;background:#fff;border-radius:28px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:0 16px 48px rgba(0,0,0,.15);animation:pop .5s ease}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.sp-icon svg{width:60px;height:60px}
+.sp-name{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:4px}
+.sp-name span{color:var(--y)}
+.sp-sub{font-size:12px;color:rgba(255,255,255,.6);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.sp-badge{background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;padding:6px 16px;border-radius:999px;margin-bottom:48px;font-family:'Syne',sans-serif}
+.sp-bar-w{width:140px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden}
+.sp-bar{height:100%;width:0;background:#fff;border-radius:2px;animation:ld 2s ease forwards}
+@keyframes ld{0%{width:0}60%{width:70%}100%{width:100%}}
+
+/* ══ AUTH ══ */
+.auth-scr{min-height:100vh;background:var(--blk);display:flex;flex-direction:column}
+.auth-tp{background:var(--g);padding:2.5rem 1.5rem 2.5rem;position:relative;overflow:hidden}
+.auth-tp::after{content:'';position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08);top:-50px;right:-50px}
+.a-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.a-logo-box{width:56px;height:56px;background:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.a-logo-box svg{width:34px;height:34px}
+.a-brand{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.1}
+.a-brand span{color:var(--y)}
+.a-tag{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px}
+.partner-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:7px 14px;border-radius:999px;margin-bottom:12px}
+.auth-bt{background:var(--bg);border-radius:28px 28px 0 0;padding:2rem 1.5rem;flex:1;margin-top:-16px}
+.auth-tab-r{display:grid;grid-template-columns:1fr 1fr;background:#E5E7EB;border-radius:12px;padding:3px;margin-bottom:1.75rem;gap:3px}
+.atab{padding:10px;text-align:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--mute);cursor:pointer;border-radius:10px;border:none;background:transparent;transition:all .2s}
+.atab.on{background:var(--card);color:var(--blk);box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.fgrp{margin-bottom:14px}
+.fgrp label{display:block;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--mute);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.fgrp input,.fgrp select{width:100%;padding:13px 14px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--card);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--blk);outline:none;transition:border-color .2s,box-shadow .2s;appearance:none}
+.fgrp input:focus,.fgrp select:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(0,201,123,.15)}
+.fgrp input::placeholder{color:#C5C5C5}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pass-wrap{position:relative}.pass-wrap input{padding-right:44px}
+.eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px}
+.spec-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.sp-chip{font-size:12px;font-weight:500;padding:6px 12px;border-radius:999px;background:var(--card);border:1.5px solid var(--border);color:var(--blk);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.sp-chip:hover{border-color:var(--g)}
+.sp-chip.on{background:var(--g);border-color:var(--g);color:#fff;font-weight:600}
+.btn-g{width:100%;padding:15px;background:var(--g);color:#fff;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 6px 20px rgba(0,201,123,.3);transition:transform .15s,opacity .15s}
+.btn-g:active{transform:scale(.97)}
+.btn-g:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn-outline{width:100%;padding:13px;background:transparent;color:var(--blk);border:1.5px solid var(--border);border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
+.btn-red{width:100%;padding:13px;background:var(--redl);color:var(--red);border:1.5px solid #FFD0D0;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer}
+.auth-or{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--mute)}
+.alink{color:var(--g);font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
+.sub-note{font-size:11px;color:var(--mute);text-align:center;margin-top:8px;line-height:1.5}
+
+/* ══ TOPBAR ══ */
+.topbar{background:var(--blk);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.4)}
+.tb-l{display:flex;align-items:center;gap:10px}
+.tb-logo{width:36px;height:36px;background:var(--g);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tb-logo svg{width:22px;height:22px}
+.tb-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:#fff;letter-spacing:-.02em;line-height:1}
+.tb-brand span{color:var(--y)}
+.tb-sub{font-size:10px;color:#666;margin-top:1px}
+.tb-r{display:flex;align-items:center;gap:10px}
+.online-pill{display:flex;align-items:center;gap:6px;background:#1E1E1E;border-radius:999px;padding:6px 12px;border:1px solid #333}
+.op-dot{width:8px;height:8px;border-radius:50%;background:var(--g);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.op-txt{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff}
+.u-av{width:34px;height:34px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;cursor:pointer}
+
+/* DROPDOWN */
+.drop-m{position:absolute;right:16px;top:62px;background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);box-shadow:0 12px 40px rgba(0,0,0,.15);z-index:200;min-width:190px;display:none;animation:up .2s ease;overflow:hidden}
+.drop-m.open{display:block}
+.dh{background:var(--blk);padding:14px 16px;display:flex;align-items:center;gap:10px}
+.dh-av{width:36px;height:36px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.dh-nm{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.dh-ph{font-size:11px;color:#888;margin-top:2px}
+.di{padding:13px 16px;font-size:13px;font-weight:500;color:var(--blk);cursor:pointer;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border);transition:background .15s}
+.di:last-child{border-bottom:none}
+.di:hover{background:var(--bg)}
+.di.red{color:var(--red)}
+
+/* ══ PAGES ══ */
+.ph{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:50}
+.bk-btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ph-t{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--blk);flex:1}
+.ph-b{background:var(--g);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;font-family:'Syne',sans-serif}
+
+/* DASHBOARD */
+.sec-h{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 8px}
+.sec-t{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--blk)}
+.sec-l{font-size:12px;color:var(--g);font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
+
+/* EARN CARD */
+.earn-card{margin:16px;background:var(--blk);border-radius:var(--rlg);padding:20px;position:relative;overflow:hidden}
+.earn-card::before{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(0,201,123,.08);top:-60px;right:-40px}
+.earn-row{display:flex;justify-content:space-around;align-items:center}
+.earn-item{text-align:center}
+.earn-lbl{font-size:10px;color:#888;font-family:'Syne',sans-serif;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.earn-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff}
+.earn-val span{font-size:14px;color:var(--g)}
+.earn-sub{font-size:11px;color:var(--g);font-weight:600;margin-top:3px}
+.earn-div{width:1px;height:40px;background:#333}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:16px;border-top:1px solid #2C2C2C}
+.toggle-lbl{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#ccc}
+.toggle-sw{width:48px;height:26px;background:var(--g);border-radius:13px;position:relative;cursor:pointer;transition:background .2s}
+.toggle-sw.off{background:#444}
+.toggle-knob{position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .2s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+.toggle-sw.off .toggle-knob{left:25px}
+
+/* NEW REQUEST CARD */
+.req-card{margin:0 16px 12px;background:var(--blk);border-radius:var(--rlg);padding:16px;border-left:4px solid var(--y);animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+.req-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.req-live{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:999px;font-family:'Syne',sans-serif;animation:blink2 1s step-start infinite;letter-spacing:.05em}
+@keyframes blink2{50%{opacity:0}}
+.req-dist-tag{background:#2C2C2C;color:#ccc;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;font-family:'Syne',sans-serif}
+.req-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:5px}
+.req-loc{font-size:12px;color:#888;margin-bottom:2px}
+.req-time{font-size:11px;color:var(--y);font-weight:600;margin-bottom:12px;font-family:'Syne',sans-serif}
+.req-earn-row{background:#1E1E1E;border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.rel-lbl{font-size:11px;color:#888}
+.rel-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--g)}
+.req-btns{display:flex;gap:10px}
+.rbtn-acc{flex:2;padding:13px;background:var(--g);color:#fff;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(0,201,123,.3);transition:transform .1s}
+.rbtn-acc:active{transform:scale(.97)}
+.rbtn-dec{flex:1;padding:13px;background:#2C2C2C;color:#888;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+
+/* JOB IN PROGRESS */
+.job-prog-card{margin:0 16px 12px;background:var(--blk);border-radius:var(--rlg);padding:16px;border-left:4px solid var(--g)}
+.jp-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.jp-av{width:44px;height:44px;border-radius:14px;background:#1E1E1E;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.jp-info{flex:1}
+.jp-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;margin-bottom:3px}
+.jp-loc{font-size:12px;color:#888}
+.jp-call{width:42px;height:42px;background:var(--gl);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0}
+.jp-pbar{height:6px;background:#2C2C2C;border-radius:999px;overflow:hidden;margin-bottom:6px}
+.jp-pbar-fill{height:100%;background:linear-gradient(90deg,var(--g),#00E68A);border-radius:999px;transition:width .4s ease;width:0}
+.jp-msg{font-size:12px;color:#888;text-align:center}
+.jp-done-btn{width:100%;margin-top:10px;padding:13px;background:var(--y);color:var(--blk);border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+
+/* RECENT JOBS */
+.job-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--card)}
+.job-row:last-child{border-bottom:none}
+.jr-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.jr-info{flex:1}
+.jr-name{font-size:13px;font-weight:600;color:var(--blk);margin-bottom:2px}
+.jr-loc{font-size:11px;color:var(--mute)}
+.jr-amt{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--g)}
+.jr-done{font-size:10px;color:var(--g);font-weight:600;font-family:'Syne',sans-serif;background:var(--gl);padding:3px 8px;border-radius:6px}
+
+/* PROFILE CARD */
+.prof-card{margin:16px;background:var(--card);border-radius:var(--rlg);border:1.5px solid var(--border);padding:18px}
+.pc-row{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.pc-av{width:60px;height:60px;border-radius:18px;background:var(--g);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;flex-shrink:0}
+.pc-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--blk)}
+.pc-spec{font-size:12px;color:var(--mute);margin-top:3px}
+.pc-ver{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#00875A;background:var(--gl);padding:3px 10px;border-radius:6px;margin-top:5px;font-family:'Syne',sans-serif}
+.pc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-radius:var(--r);overflow:hidden;border:1px solid var(--border)}
+.pc-stat{padding:12px;text-align:center;background:var(--bg)}
+.pc-stat:not(:last-child){border-right:1px solid var(--border)}
+.pcs-val{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--blk)}
+.pcs-lbl{font-size:10px;color:var(--mute);margin-top:3px}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--border);display:flex;align-items:center;padding:8px 0;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0}
+.bn-icon{font-size:20px;line-height:1}
+.bn-lbl{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--mute);letter-spacing:.03em}
+.bn-item.on .bn-lbl{color:var(--blk)}
+.bn-item.on .bn-icon{filter:none}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="s-sp" class="screen active">
+<div class="splash">
+  <div class="sp-icon">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <path d="M52 12l-3-5h-6l-3 5a17 17 0 0 0-5 3l-6-1-3 5 4 5a17 17 0 0 0 0 5l-4 5 3 5 6-1a17 17 0 0 0 5 3l3 5h6l3-5a17 17 0 0 0 5-3l6 1 3-5-4-5a17 17 0 0 0 0-5l4-5-3-5-6 1a17 17 0 0 0-5-3z" fill="#00C97B"/>
+      <circle cx="46" cy="40" r="9" fill="#fff"/>
+      <circle cx="46" cy="40" r="4" fill="#00C97B"/>
+      <rect x="26" y="48" width="28" height="7" rx="3.5" transform="rotate(45 40 51.5)" fill="#00C97B"/>
+      <circle cx="57" cy="24" r="7" fill="#00C97B"/>
+      <circle cx="57" cy="24" r="3.5" fill="#fff"/>
+    </svg>
+  </div>
+  <div class="sp-name">Quick<span>Buddy</span></div>
+  <div class="sp-sub">Partner App</div>
+  <div class="sp-badge">🔧 Mechanic Dashboard</div>
+  <div class="sp-bar-w"><div class="sp-bar"></div></div>
+</div>
+</div>
+
+<!-- AUTH -->
+<div id="s-auth" class="screen">
+<div class="auth-scr">
+  <div class="auth-tp">
+    <div class="a-logo-row">
+      <div class="a-logo-box">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <path d="M52 12l-3-5h-6l-3 5a17 17 0 0 0-5 3l-6-1-3 5 4 5a17 17 0 0 0 0 5l-4 5 3 5 6-1a17 17 0 0 0 5 3l3 5h6l3-5a17 17 0 0 0 5-3l6 1 3-5-4-5a17 17 0 0 0 0-5l4-5-3-5-6 1a17 17 0 0 0-5-3z" fill="#00C97B"/>
+          <circle cx="46" cy="40" r="9" fill="#fff"/>
+          <circle cx="46" cy="40" r="4" fill="#00C97B"/>
+          <rect x="26" y="48" width="28" height="7" rx="3.5" transform="rotate(45 40 51.5)" fill="#00C97B"/>
+        </svg>
+      </div>
+      <div>
+        <div class="a-brand">Quick<span>Buddy</span></div>
+        <div class="a-tag">Mechanic Partner Portal</div>
+      </div>
+    </div>
+    <div class="partner-badge">🔧 Partner Registration</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.6">Register once. Get jobs near you. Earn every day — only registered mechanics get notifications.</div>
+  </div>
+  <div class="auth-bt">
+    <div class="auth-tab-r">
+      <button class="atab on" id="tl" onclick="stab('l')">Login</button>
+      <button class="atab" id="tr" onclick="stab('r')">Register</button>
+    </div>
+    <!-- LOGIN -->
+    <div id="fl">
+      <div class="fgrp"><label>Phone or Email</label><input type="text" id="li" placeholder="Enter phone or email" oninput="chkLg()"/></div>
+      <div class="fgrp"><label>Password</label><div class="pass-wrap"><input type="password" id="lp" placeholder="Password" oninput="chkLg()"/><span class="eye" onclick="tpw('lp',this)">👁</span></div></div>
+      <button class="btn-g" id="bl" onclick="doLg()" disabled style="margin-bottom:10px">Login as Mechanic</button>
+      <div class="auth-or"><span>No account?</span><span class="alink" onclick="stab('r')">Register free →</span></div>
+    </div>
+    <!-- REGISTER -->
+    <div id="fr" style="display:none">
+      <div class="frow2">
+        <div class="fgrp"><label>First Name</label><input type="text" id="rfn" placeholder="First" oninput="chkRg()"/></div>
+        <div class="fgrp"><label>Last Name</label><input type="text" id="rln" placeholder="Last" oninput="chkRg()"/></div>
+      </div>
+      <div class="fgrp"><label>Phone Number</label><input type="tel" id="rph" placeholder="10-digit mobile" maxlength="10" oninput="chkRg()"/></div>
+      <div class="fgrp"><label>City / Area</label><input type="text" id="rct" placeholder="e.g. Ludhiana, Model Town" oninput="chkRg()"/></div>
+      <div class="fgrp"><label>Specialization</label>
+        <div class="spec-chips">
+          <span class="sp-chip" onclick="pickSpec(this)">⚡ EV</span>
+          <span class="sp-chip" onclick="pickSpec(this)">🏍️ Bike</span>
+          <span class="sp-chip" onclick="pickSpec(this)">🚗 Car</span>
+          <span class="sp-chip" onclick="pickSpec(this)">🛵 Scooter</span>
+          <span class="sp-chip" onclick="pickSpec(this)">🔧 General</span>
+          <span class="sp-chip" onclick="pickSpec(this)">🚛 Truck</span>
+        </div>
+      </div>
+      <div class="fgrp"><label>Experience (years)</label><input type="number" id="rexp" placeholder="e.g. 5" oninput="chkRg()"/></div>
+      <div class="fgrp"><label>Password</label><div class="pass-wrap"><input type="password" id="rpw" placeholder="Min 6 characters" oninput="chkRg()"/><span class="eye" onclick="tpw('rpw',this)">👁</span></div></div>
+      <button class="btn-g" id="br" onclick="doRg()" disabled style="margin-bottom:8px">Register — ₹299/month</button>
+      <div class="sub-note">After registration, you'll appear in user searches and receive job notifications.</div>
+      <div class="auth-or" style="margin-top:10px"><span>Have account?</span><span class="alink" onclick="stab('l')">Login →</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MAIN APP -->
+<div id="s-app" class="screen">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <path d="M52 12l-3-5h-6l-3 5a17 17 0 0 0-5 3l-6-1-3 5 4 5a17 17 0 0 0 0 5l-4 5 3 5 6-1a17 17 0 0 0 5 3l3 5h6l3-5a17 17 0 0 0 5-3l6 1 3-5-4-5a17 17 0 0 0 0-5l4-5-3-5-6 1a17 17 0 0 0-5-3z" fill="#fff"/>
+          <circle cx="46" cy="40" r="9" fill="#00C97B"/>
+          <circle cx="46" cy="40" r="4" fill="#fff"/>
+          <rect x="26" y="48" width="28" height="7" rx="3.5" transform="rotate(45 40 51.5)" fill="#fff"/>
+        </svg>
+      </div>
+      <div>
+        <div class="tb-brand">Quick<span>Buddy</span></div>
+        <div class="tb-sub">Partner Dashboard</div>
+      </div>
+    </div>
+    <div class="tb-r">
+      <div class="online-pill" id="op-pill">
+        <div class="op-dot" id="op-dot"></div>
+        <span class="op-txt" id="op-txt">Online</span>
+      </div>
+      <div class="u-av" id="m-av" onclick="togMnu()">M</div>
+    </div>
+  </div>
+
+  <!-- DROPDOWN -->
+  <div class="drop-m" id="dmnu">
+    <div class="dh">
+      <div class="dh-av" id="dav">M</div>
+      <div><div class="dh-nm" id="dnm">Mechanic</div><div class="dh-ph" id="dph">+91 XXXXXXXXXX</div></div>
+    </div>
+    <div class="di" onclick="clsMnu()">👤 My Profile</div>
+    <div class="di" onclick="clsMnu()">📊 Earnings Report</div>
+    <div class="di" onclick="clsMnu()">💬 Support</div>
+    <div class="di" onclick="clsMnu()">⚙️ Settings</div>
+    <div class="drop-sep"></div>
+    <div class="di red" onclick="doLout()">🚪 Logout</div>
+  </div>
+
+  <!-- DASHBOARD PAGE -->
+  <div id="p-dash" class="page active">
+
+    <!-- EARN CARD -->
+    <div class="earn-card">
+      <div class="earn-row">
+        <div class="earn-item">
+          <div class="earn-lbl">Today's Earnings</div>
+          <div class="earn-val">₹<span id="earn-val">1,240</span></div>
+          <div class="earn-sub">+₹450 last job</div>
+        </div>
+        <div class="earn-div"></div>
+        <div class="earn-item">
+          <div class="earn-lbl">Jobs Done</div>
+          <div class="earn-val" id="jobs-val">4</div>
+          <div class="earn-sub">Today</div>
+        </div>
+        <div class="earn-div"></div>
+        <div class="earn-item">
+          <div class="earn-lbl">Rating</div>
+          <div class="earn-val">4.8</div>
+          <div class="earn-sub">⭐ 142 reviews</div>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-lbl" id="tog-lbl">Available for jobs</span>
+        <div class="toggle-sw" id="tog-sw" onclick="togAvail()">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW REQUEST (hidden by default) -->
+    <div id="new-req" style="display:none">
+      <div class="req-card">
+        <div class="req-badge-row">
+          <span class="req-live">● LIVE</span>
+          <span class="req-dist-tag">📍 1.2 km away</span>
+        </div>
+        <div class="req-title" id="rq-title">Battery Dead — EV Scooter</div>
+        <div class="req-loc" id="rq-loc">GT Road, near Sarabha Nagar, Ludhiana</div>
+        <div class="req-time" id="rq-time">11:22 PM · Urgent</div>
+        <div class="req-earn-row">
+          <div><div class="rel-lbl">Estimated earning</div></div>
+          <div class="rel-val">₹90–₹200</div>
+        </div>
+        <div class="req-btns">
+          <button class="rbtn-acc" onclick="acceptJob()">✅ Accept Job</button>
+          <button class="rbtn-dec" onclick="declineJob()">Decline</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOB IN PROGRESS -->
+    <div id="job-prog" style="display:none">
+      <div class="job-prog-card">
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:#888;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Job In Progress</div>
+        <div class="jp-row">
+          <div class="jp-av">👤</div>
+          <div class="jp-info">
+            <div class="jp-title" id="jp-title">User · Battery Dead</div>
+            <div class="jp-loc" id="jp-loc">GT Road, Ludhiana</div>
+          </div>
+          <div class="jp-call" onclick="alert('Calling user...')">📞</div>
+        </div>
+        <div class="jp-pbar"><div class="jp-pbar-fill" id="jp-fill"></div></div>
+        <div class="jp-msg" id="jp-msg">Heading to user location...</div>
+        <button class="jp-done-btn" id="jp-done" style="display:none" onclick="completeJob()">Mark Job Complete ✅</button>
+      </div>
+    </div>
+
+    <!-- RECENT JOBS -->
+    <div class="sec-h"><div class="sec-t">Recent Jobs</div><span class="sec-l">See all</span></div>
+    <div style="background:var(--card);border-radius:var(--rlg);margin:0 16px;border:1.5px solid var(--border);overflow:hidden">
+      <div class="job-row">
+        <div class="jr-icon" style="background:#FFF8E1">🔋</div>
+        <div class="jr-info"><div class="jr-name">Battery Issue — Car</div><div class="jr-loc">Model Town · 8:30 PM</div></div>
+        <div style="text-align:right"><div class="jr-amt">₹350</div><div class="jr-done">Done ✓</div></div>
+      </div>
+      <div class="job-row">
+        <div class="jr-icon" style="background:#E6FBF2">⚡</div>
+        <div class="jr-info"><div class="jr-name">EV Battery Check</div><div class="jr-loc">BRS Nagar · 6:00 PM</div></div>
+        <div style="text-align:right"><div class="jr-amt">₹450</div><div class="jr-done">Done ✓</div></div>
+      </div>
+      <div class="job-row">
+        <div class="jr-icon" style="background:#FFF0F0">🔧</div>
+        <div class="jr-info"><div class="jr-name">Puncture Fix — Bike</div><div class="jr-loc">Civil Lines · 3:00 PM</div></div>
+        <div style="text-align:right"><div class="jr-amt">₹200</div><div class="jr-done">Done ✓</div></div>
+      </div>
+      <div class="job-row">
+        <div class="jr-icon" style="background:#EEF2FF">⚙️</div>
+        <div class="jr-info"><div class="jr-name">Engine Repair</div><div class="jr-loc">Dugri · 11:00 AM</div></div>
+        <div style="text-align:right"><div class="jr-amt">₹240</div><div class="jr-done">Done ✓</div></div>
+      </div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- PROFILE PAGE -->
+  <div id="p-prof" class="page" style="display:none">
+    <div class="sec-h" style="padding-top:20px"><div class="sec-t">My Profile</div></div>
+    <div class="prof-card">
+      <div class="pc-row">
+        <div class="pc-av" id="pc-av">M</div>
+        <div>
+          <div class="pc-name" id="pc-nm">Mechanic Name</div>
+          <div class="pc-spec" id="pc-sp">General Mechanic</div>
+          <div class="pc-ver">✅ Verified Partner</div>
+        </div>
+      </div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="pcs-val" id="pc-jobs">4</div><div class="pcs-lbl">Jobs Today</div></div>
+        <div class="pc-stat"><div class="pcs-val">4.8⭐</div><div class="pcs-lbl">Rating</div></div>
+        <div class="pc-stat"><div class="pcs-val" id="pc-earn">₹1,240</div><div class="pcs-lbl">Today</div></div>
+      </div>
+    </div>
+    <div style="margin:0 16px">
+      <button class="btn-outline" style="margin-bottom:10px" onclick="clsMnu()">✏️ Edit Profile</button>
+      <button class="btn-red" onclick="doLout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <div class="bn-item on" onclick="bnv(this,'p-dash')"><div class="bn-icon">🏠</div><div class="bn-lbl">Dashboard</div></div>
+    <div class="bn-item" onclick="bnv(this,null)"><div class="bn-icon">📋</div><div class="bn-lbl">Jobs</div></div>
+    <div class="bn-item" onclick="bnv(this,null)"><div class="bn-icon">💰</div><div class="bn-lbl">Earnings</div></div>
+    <div class="bn-item" onclick="bnv(this,'p-prof')"><div class="bn-icon">👤</div><div class="bn-lbl">Profile</div></div>
+  </div>
+</div>
+
+<script>
+var M={name:'Mechanic',init:'M',phone:'',spec:'General'};
+var isOn=true,jobInt=null,isReg=false;
+
+setTimeout(function(){var sv=localStorage.getItem('qb_mech');if(sv){M=JSON.parse(sv);enterApp();}else showScr('s-auth');},2300);
+
+function showScr(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+function goPage(id){document.querySelectorAll('.page').forEach(function(p){p.style.display='none';p.classList.remove('active');});document.getElementById(id).style.display='block';document.getElementById(id).classList.add('active');}
+
+/* Auth */
+function stab(t){document.getElementById('tl').classList.toggle('on',t==='l');document.getElementById('tr').classList.toggle('on',t==='r');document.getElementById('fl').style.display=t==='l'?'':'none';document.getElementById('fr').style.display=t==='r'?'':'none';}
+function tpw(id,el){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password';el.textContent=i.type==='password'?'👁':'🙈';}
+var selSpec='General';
+function pickSpec(el){document.querySelectorAll('.sp-chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');selSpec=el.textContent.trim();chkRg();}
+function chkLg(){var u=document.getElementById('li').value.trim(),p=document.getElementById('lp').value.trim();document.getElementById('bl').disabled=!(u.length>2&&p.length>=4);}
+function chkRg(){var fn=document.getElementById('rfn').value.trim(),ph=document.getElementById('rph').value.trim(),ct=document.getElementById('rct').value.trim(),exp=document.getElementById('rexp').value.trim(),pw=document.getElementById('rpw').value.trim();document.getElementById('br').disabled=!(fn.length>1&&ph.length===10&&ct.length>2&&exp.length>0&&pw.length>=6&&selSpec);}
+
+function doLg(){var u=document.getElementById('li').value.trim();var sv=localStorage.getItem('qb_mech');M=sv?JSON.parse(sv):{name:u.split('@')[0],init:u[0].toUpperCase(),phone:u,spec:'General'};enterApp();}
+function doRg(){var fn=document.getElementById('rfn').value.trim(),ln=document.getElementById('rln').value.trim(),ph=document.getElementById('rph').value.trim();M={name:fn+(ln?' '+ln:''),init:fn[0].toUpperCase()+(ln?ln[0].toUpperCase():''),phone:'+91 '+ph,spec:selSpec};localStorage.setItem('qb_mech',JSON.stringify(M));enterApp();}
+function enterApp(){
+  showScr('s-app');goPage('p-dash');isReg=true;
+  document.getElementById('m-av').textContent=M.init;
+  document.getElementById('dav').textContent=M.init;
+  document.getElementById('dnm').textContent=M.name;
+  document.getElementById('dph').textContent=M.phone||'Partner';
+  document.getElementById('pc-av').textContent=M.init;
+  document.getElementById('pc-nm').textContent=M.name;
+  document.getElementById('pc-sp').textContent=M.spec;
+  listenReq();
+}
+function doLout(){clsMnu();localStorage.removeItem('qb_mech');localStorage.removeItem('qb_req');showScr('s-auth');}
+
+/* Dropdown */
+function togMnu(){document.getElementById('dmnu').classList.toggle('open');}
+function clsMnu(){document.getElementById('dmnu').classList.remove('open');}
+document.addEventListener('click',function(e){if(!e.target.closest('.u-av')&&!e.target.closest('.drop-m'))clsMnu();});
+
+/* Toggle availability */
+function togAvail(){
+  isOn=!isOn;
+  var sw=document.getElementById('tog-sw');
+  var dot=document.getElementById('op-dot');
+  var txt=document.getElementById('op-txt');
+  var lbl=document.getElementById('tog-lbl');
+  sw.classList.toggle('off',!isOn);
+  dot.style.background=isOn?'var(--g)':'#555';
+  txt.textContent=isOn?'Online':'Offline';
+  lbl.textContent=isOn?'Available for jobs':'Not accepting jobs';
+}
+
+/* Nav */
+function bnv(el,pg){document.querySelectorAll('.bn-item').forEach(function(b){b.classList.remove('on');});el.classList.add('on');if(pg)goPage(pg);}
+
+/* Listen for requests */
+function listenReq(){
+  setInterval(function(){
+    if(!isReg||!isOn)return;
+    var d=localStorage.getItem('qb_req');
+    if(!d)return;
+    var r=JSON.parse(d);
+    var req=document.getElementById('new-req');
+    if(r.status==='pending'&&req.style.display==='none'&&document.getElementById('job-prog').style.display==='none'){
+      document.getElementById('rq-title').textContent=(r.problem||'Breakdown')+' — '+(r.vehicle||'Vehicle');
+      document.getElementById('rq-loc').textContent=r.location||'Nearby';
+      document.getElementById('rq-time').textContent=(r.time||'')+'  · Urgent';
+      req.style.display='block';
+      document.getElementById('op-txt').textContent='New Job!';
+      document.getElementById('op-dot').style.background=var_y||'#FFC107';
+      document.getElementById('op-dot').style.background='#FFC107';
+    }
+    if(r.status==='completed'&&document.getElementById('job-prog').style.display==='block'){
+      completeJob();
+    }
+  },1000);
+}
+
+function acceptJob(){
+  document.getElementById('new-req').style.display='none';
+  document.getElementById('job-prog').style.display='block';
+  var d=localStorage.getItem('qb_req');
+  if(d){var r=JSON.parse(d);document.getElementById('jp-title').textContent=r.user+' · '+(r.problem||'Job');document.getElementById('jp-loc').textContent=r.location||'Nearby';}
+  document.getElementById('op-txt').textContent='On Job';
+  startJobProgress();
+}
+
+function declineJob(){
+  document.getElementById('new-req').style.display='none';
+  document.getElementById('op-txt').textContent='Online';
+  document.getElementById('op-dot').style.background='var(--g)';
+  localStorage.removeItem('qb_req');
+}
+
+function startJobProgress(){
+  var pct=0;
+  var msgs=['Heading to user location...','Almost at location, 500m away!','Reached user. Starting repair...','Repair in progress...','Almost done!'];
+  jobInt=setInterval(function(){
+    pct=Math.min(pct+4,100);
+    document.getElementById('jp-fill').style.width=pct+'%';
+    document.getElementById('jp-msg').textContent=msgs[Math.min(Math.floor(pct/20),4)];
+    if(pct>=100){clearInterval(jobInt);document.getElementById('jp-done').style.display='block';document.getElementById('jp-msg').textContent='Job complete! Mark as done.';}
+  },400);
+}
+
+function completeJob(){
+  clearInterval(jobInt);
+  document.getElementById('job-prog').style.display='none';
+  var ev=parseInt(document.getElementById('earn-val').textContent.replace(/,/g,''))||1240;
+  ev+=450;document.getElementById('earn-val').textContent=ev.toLocaleString('en-IN');
+  var jv=parseInt(document.getElementById('jobs-val').textContent)||4;
+  jv++;document.getElementById('jobs-val').textContent=jv;
+  document.getElementById('pc-jobs').textContent=jv;
+  document.getElementById('pc-earn').textContent='₹'+ev.toLocaleString('en-IN');
+  document.getElementById('op-txt').textContent='Online';
+  document.getElementById('op-dot').style.background='var(--g)';
+  localStorage.removeItem('qb_req');
+}
+</script>
+</body>
+</html>

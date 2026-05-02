@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>QuickBuddy — Fixing Your Ride, Anytime, Anywhere</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FFC107'/%3E%3Cpath d='M40 10l-2.5-4h-5L30 10a14 14 0 0 0-4 2.5l-5-.8-2.5 4.3 3.2 4A14 14 0 0 0 21 24a14 14 0 0 0 .2 4l-3.2 4 2.5 4.3 5-.8A14 14 0 0 0 30 38l2.5 4h5L40 38a14 14 0 0 0 4-2.5l5 .8 2.5-4.3-3.2-4A14 14 0 0 0 48.5 24a14 14 0 0 0-.2-4l3.2-4-2.5-4.3-5 .8A14 14 0 0 0 40 10z' fill='%23111'/%3E%3Ccircle cx='37' cy='24' r='6' fill='%23FFC107'/%3E%3Cpath d='M8 22l14 1.5M8 26l11 1M8 30l9 0' stroke='%23111' stroke-width='2.5' stroke-linecap='round'/%3E%3Crect x='24' y='30' width='20' height='5' rx='2.5' transform='rotate(45 34 32.5)' fill='%23111'/%3E%3Ccircle cx='47' cy='42' r='3' fill='%23111'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════
+   QUICKBUDDY — DESIGN SYSTEM
+   Brand: Yellow #FFC107 + Black #111
+═══════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --y:#FFC107;--yd:#FFB300;--yl:#FFF8E1;
+  --blk:#111111;--blk2:#1E1E1E;--blk3:#2C2C2C;
+  --grn:#00C97B;--grn-l:#E6FBF2;
+  --red:#FF4444;--red-l:#FFF0F0;
+  --bg:#F6F7F9;--card:#FFFFFF;
+  --mute:#888;--border:#EBEBEB;
+  --r:14px;--r-lg:20px;--r-xl:28px;
+}
+html{font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--blk);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+.screen{display:none}.screen.active{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── LOGO SVG ── */
+.logo-svg{display:block}
+
+/* ══ SPLASH ══ */
+.splash{min-height:100vh;background:var(--y);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.splash::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(0,0,0,0.06);top:-100px;right:-100px}
+.splash::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(0,0,0,0.04);bottom:-80px;left:-80px}
+.splash-icon{width:100px;height:100px;background:var(--blk);border-radius:28px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:0 16px 48px rgba(0,0,0,0.2);animation:pop .5s ease}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.splash-icon svg{width:60px;height:60px}
+.splash-name{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--blk);letter-spacing:-0.03em;margin-bottom:6px}
+.splash-name span{color:#fff}
+.splash-tag{font-size:13px;color:rgba(0,0,0,0.5);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:48px}
+.splash-bar-wrap{width:160px;height:4px;background:rgba(0,0,0,0.12);border-radius:2px;overflow:hidden}
+.splash-bar{height:100%;width:0;background:var(--blk);border-radius:2px;animation:load 2s ease forwards}
+@keyframes load{0%{width:0}60%{width:70%}100%{width:100%}}
+
+/* ══ AUTH ══ */
+.auth-screen{min-height:100vh;background:var(--blk);display:flex;flex-direction:column}
+.auth-top{background:var(--y);padding:3rem 1.5rem 3rem;position:relative;overflow:hidden}
+.auth-top::after{content:'';position:absolute;width:250px;height:250px;border-radius:50%;background:rgba(0,0,0,0.08);top:-60px;right:-60px}
+.auth-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.auth-logo-box{width:58px;height:58px;background:var(--blk);border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+.auth-logo-box svg{width:36px;height:36px}
+.auth-brand-big{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;color:var(--blk);letter-spacing:-0.02em;line-height:1}
+.auth-brand-big span{color:#fff}
+.auth-tagline-big{font-size:12px;color:rgba(0,0,0,0.5);margin-top:4px;letter-spacing:0.02em}
+.trust-pills{display:flex;gap:7px;flex-wrap:wrap}
+.tp{background:rgba(0,0,0,0.1);color:var(--blk);font-size:11px;font-weight:600;padding:5px 11px;border-radius:999px;font-family:'Syne',sans-serif}
+.auth-bottom{background:var(--bg);border-radius:28px 28px 0 0;padding:2rem 1.5rem;flex:1;margin-top:-16px}
+.auth-tab-row{display:grid;grid-template-columns:1fr 1fr;background:#E5E7EB;border-radius:12px;padding:3px;margin-bottom:1.75rem;gap:3px}
+.atab{padding:10px;text-align:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--mute);cursor:pointer;border-radius:10px;border:none;background:transparent;transition:all .2s}
+.atab.on{background:var(--card);color:var(--blk);box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+.fgrp{margin-bottom:14px}
+.fgrp label{display:block;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--mute);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.fgrp input{width:100%;padding:13px 14px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--card);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--blk);outline:none;transition:border-color .2s,box-shadow .2s}
+.fgrp input:focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(255,193,7,.18)}
+.fgrp input::placeholder{color:#C5C5C5}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:44px}
+.eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;line-height:1}
+.btn-y{width:100%;padding:15px;background:var(--y);color:var(--blk);border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:800;font-size:15px;cursor:pointer;letter-spacing:.01em;box-shadow:0 6px 20px rgba(255,193,7,.35);transition:transform .15s,opacity .15s}
+.btn-y:active{transform:scale(.97)}
+.btn-y:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn-outline{width:100%;padding:13px;background:transparent;color:var(--blk);border:1.5px solid var(--border);border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:border-color .2s}
+.btn-outline:hover{border-color:var(--blk)}
+.auth-or{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--mute)}
+.alink{color:var(--blk);font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
+.forgot{font-size:12px;color:var(--mute);text-align:right;margin-bottom:14px;cursor:pointer}
+
+/* ══ APP TOPBAR ══ */
+.topbar{background:var(--blk);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.4)}
+.tb-left{display:flex;align-items:center;gap:10px}
+.tb-logo-box{width:36px;height:36px;background:var(--y);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tb-logo-box svg{width:22px;height:22px}
+.tb-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:-.02em;line-height:1}
+.tb-brand span{color:var(--y)}
+.tb-loc{font-size:10px;color:#666;margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:10px}
+.notif-wrap{position:relative;cursor:pointer;font-size:20px;line-height:1}
+.notif-red{position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid var(--blk)}
+.user-chip{display:flex;align-items:center;gap:7px;background:#1E1E1E;border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;border:1px solid #333;transition:border-color .2s}
+.user-chip:hover{border-color:var(--y)}
+.u-av{width:26px;height:26px;border-radius:50%;background:var(--y);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--blk)}
+.u-name{font-size:12px;color:#fff;font-family:'DM Sans',sans-serif}
+
+/* ══ DROPDOWN ══ */
+.drop-menu{position:absolute;right:16px;top:62px;background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);box-shadow:0 12px 40px rgba(0,0,0,.15);z-index:200;min-width:190px;display:none;animation:fadeUp .2s ease;overflow:hidden}
+.drop-menu.open{display:block}
+.drop-head{background:var(--blk);padding:14px 16px;display:flex;align-items:center;gap:10px}
+.dh-av{width:36px;height:36px;border-radius:50%;background:var(--y);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--blk);flex-shrink:0}
+.dh-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.dh-ph{font-size:11px;color:#888;margin-top:2px}
+.di{padding:13px 16px;font-size:13px;font-weight:500;color:var(--blk);cursor:pointer;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border);transition:background .15s}
+.di:last-child{border-bottom:none}
+.di:hover{background:var(--bg)}
+.di.red{color:var(--red)}
+.drop-sep{height:1px;background:var(--border)}
+
+/* ══ PAGES ══ */
+.page{display:none;animation:fadeUp .25s ease}
+.page.active{display:block}
+.page-hdr{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:50}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ph-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--blk);flex:1}
+.ph-badge{background:var(--y);color:var(--blk);font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;font-family:'Syne',sans-serif}
+
+/* ══ HOME PAGE ══ */
+.greet-bar{padding:14px 16px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.greet-hi{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--blk)}
+.greet-sub{font-size:12px;color:var(--mute);margin-top:3px}
+.greet-clock{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--blk);background:var(--y);padding:6px 12px;border-radius:10px}
+
+/* SOS HERO */
+.sos-hero{margin:16px;background:var(--blk);border-radius:var(--r-xl);padding:28px 20px;text-align:center;position:relative;overflow:hidden}
+.sos-hero::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,193,7,.08);top:-60px;right:-40px}
+.sos-hero::after{content:'';position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,193,7,.05);bottom:-40px;left:-30px}
+.sos-ring-1{width:160px;height:160px;border-radius:50%;border:2px solid rgba(255,193,7,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;position:relative}
+.sos-ring-2{position:absolute;inset:12px;border-radius:50%;border:1px solid rgba(255,193,7,.12)}
+.sos-big-btn{width:128px;height:128px;border-radius:50%;background:var(--y);border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:0 12px 36px rgba(255,193,7,.45),0 2px 8px rgba(0,0,0,.2);transition:transform .15s;position:relative;z-index:1}
+.sos-big-btn:active{transform:scale(.92)}
+.sos-big-btn.pulse{animation:sos-pulse 2s ease infinite}
+@keyframes sos-pulse{0%,100%{box-shadow:0 12px 36px rgba(255,193,7,.45),0 0 0 0 rgba(255,193,7,.4)}50%{box-shadow:0 12px 36px rgba(255,193,7,.45),0 0 0 20px rgba(255,193,7,0)}}
+.sos-icon-txt{font-size:32px;line-height:1}
+.sos-lbl{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--blk)}
+.sos-sublbl{font-size:10px;color:rgba(0,0,0,.6)}
+.sos-desc{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:#ccc;margin-top:12px;position:relative;z-index:1}
+.sos-hint-txt{font-size:11px;color:#666;margin-top:4px;position:relative;z-index:1}
+
+/* SECTION */
+.sec-head{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 8px}
+.sec-t{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--blk)}
+.sec-lnk{font-size:12px;color:var(--y);font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
+
+/* VEHICLE STRIP */
+.v-strip{display:flex;gap:10px;padding:0 16px 4px;overflow-x:auto;scrollbar-width:none}
+.v-strip::-webkit-scrollbar{display:none}
+.vtile{flex-shrink:0;width:72px;background:var(--card);border:2px solid var(--border);border-radius:var(--r);padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s}
+.vtile:hover,.vtile.sel-v{border-color:var(--y);background:var(--yl)}
+.vtile.sel-v .vt-img{filter:none}
+.vt-img{font-size:26px;margin-bottom:4px}
+.vt-name{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--blk)}
+
+/* SERVICES GRID */
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 16px}
+.svc-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s}
+.svc-card:hover,.svc-card.sel-svc{border-color:var(--y);background:var(--yl);transform:translateY(-2px);box-shadow:0 4px 16px rgba(255,193,7,.2)}
+.svc-emoji{font-size:26px;margin-bottom:5px}
+.svc-name{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--blk);line-height:1.3}
+.svc-price{font-size:10px;color:var(--grn);font-weight:600;margin-top:3px}
+
+/* HOW IT WORKS */
+.how-wrap{display:flex;align-items:center;padding:0 16px;gap:0;overflow:hidden}
+.how-step{flex:1;text-align:center;padding:12px 4px}
+.how-num{width:26px;height:26px;border-radius:50%;background:var(--y);color:var(--blk);font-family:'Syne',sans-serif;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+.how-emoji{font-size:20px;margin-bottom:4px}
+.how-txt{font-size:10px;font-weight:600;color:var(--blk);font-family:'Syne',sans-serif}
+.how-line{width:24px;height:2px;background:var(--border);flex-shrink:0;margin-top:-16px}
+
+/* STATS */
+.stats-bar{margin:16px;background:var(--blk);border-radius:var(--r-lg);padding:18px;display:flex;justify-content:space-around;align-items:center}
+.st-item{text-align:center}
+.st-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--y)}
+.st-lbl{font-size:10px;color:#888;margin-top:3px}
+.st-div{width:1px;height:32px;background:#333}
+
+/* ══ SEARCH PAGE ══ */
+.search-map{height:160px;background:#1a2035;position:relative;overflow:hidden}
+.map-dark-bg{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 1px,transparent 1px 28px)}
+.map-rd{position:absolute;background:rgba(255,255,255,.07);border-radius:2px}
+.map-you{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--y);color:var(--blk);font-family:'Syne',sans-serif;font-size:9px;font-weight:800;padding:4px 7px;border-radius:6px;border:2px solid #fff;box-shadow:0 2px 10px rgba(255,193,7,.5);z-index:2}
+.map-mp{position:absolute;background:var(--grn);color:#fff;font-family:'Syne',sans-serif;font-size:8px;font-weight:800;padding:3px 6px;border-radius:5px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,201,123,.5);z-index:2}
+.map-pulse-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;border:2px solid var(--y);opacity:.5;animation:ring 2s ease-out infinite;z-index:1}
+@keyframes ring{0%{transform:translate(-50%,-50%) scale(1);opacity:.6}100%{transform:translate(-50%,-50%) scale(3.5);opacity:0}}
+.map-lbl-txt{position:absolute;bottom:8px;left:10px;font-size:10px;color:rgba(255,255,255,.6);background:rgba(0,0,0,.4);padding:3px 8px;border-radius:6px}
+.s-body{padding:12px 16px}
+.prob-bar{background:var(--card);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:8px;margin-bottom:14px;border:1.5px solid var(--border)}
+.pb-label{font-size:11px;color:var(--mute);font-family:'Syne',sans-serif;font-weight:600}
+.pb-val{flex:1;font-size:13px;font-weight:600;color:var(--blk)}
+.pb-change{font-size:11px;color:var(--y);font-weight:700;cursor:pointer;font-family:'Syne',sans-serif}
+.mlist-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--mute);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+
+/* MECHANIC CARD */
+.mc{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:14px;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.mc:hover{border-color:var(--y);box-shadow:0 4px 20px rgba(255,193,7,.15);transform:translateY(-1px)}
+.mc-av{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;flex-shrink:0}
+.av-1{background:#EEF2FF;color:#3730A3}
+.av-2{background:#F0FDF4;color:#15803D}
+.av-3{background:#FFF7ED;color:#C2410C}
+.av-y{background:var(--yl);color:#7A5300}
+.mc-info{flex:1;min-width:0}
+.mc-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--blk);margin-bottom:3px}
+.mc-spec{font-size:12px;color:var(--mute);margin-bottom:5px}
+.mc-tags{display:flex;gap:5px;flex-wrap:wrap}
+.mc-tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;font-family:'Syne',sans-serif}
+.tag-rat{background:var(--yl);color:#7A5300}
+.tag-ver{background:var(--grn-l);color:#00875A}
+.tag-job{background:#F3F4F6;color:var(--mute)}
+.mc-right{text-align:right;flex-shrink:0}
+.mc-dist{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--blk)}
+.mc-eta{font-size:11px;color:var(--mute);margin-top:2px}
+.mc-price{font-size:11px;font-weight:600;color:var(--grn);margin-top:4px}
+.only-note{font-size:11px;color:var(--mute);text-align:center;padding:10px 0;display:flex;align-items:center;justify-content:center;gap:5px}
+
+/* ══ TRACKING PAGE ══ */
+.track-top{background:var(--blk);padding:16px}
+.tr-status-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.tr-pulse{width:10px;height:10px;border-radius:50%;background:var(--y);animation:blink 1s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.tr-status-txt{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.tr-map{height:140px;background:#1a2035;border-radius:var(--r-lg);position:relative;overflow:hidden;margin-bottom:0}
+.tr-you{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--y);color:var(--blk);font-family:'Syne',sans-serif;font-size:9px;font-weight:800;padding:4px 7px;border-radius:6px;border:2px solid #fff;box-shadow:0 2px 10px rgba(255,193,7,.5)}
+.tr-mpin{position:absolute;background:var(--grn);color:#fff;font-family:'Syne',sans-serif;font-size:8px;font-weight:800;padding:3px 6px;border-radius:5px;border:2px solid #fff;transition:left .5s,top .5s}
+.tr-body{padding:16px}
+.tr-mech-row{background:var(--card);border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px;border:1.5px solid var(--border)}
+.tr-info{flex:1}
+.tr-mname{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--blk)}
+.tr-mspec{font-size:12px;color:var(--mute);margin-top:2px}
+.tr-eta-row{display:flex;align-items:center;gap:6px;margin-top:6px}
+.tr-eta-lbl{font-size:10px;font-weight:600;color:var(--mute);font-family:'Syne',sans-serif}
+.tr-eta-val{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--y);background:var(--yl);padding:3px 10px;border-radius:6px}
+.tr-call{width:42px;height:42px;background:var(--grn-l);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;border:1.5px solid var(--grn)}
+.pbar-outer{background:var(--card);border-radius:var(--r-lg);padding:14px;margin-bottom:12px;border:1.5px solid var(--border)}
+.pbar-top-row{display:flex;justify-content:space-between;margin-bottom:10px}
+.pbar-lbl{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--blk)}
+.pbar-pct{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--y)}
+.pbar{height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.pbar-fill{height:100%;background:linear-gradient(90deg,var(--y),#FFD54F);border-radius:999px;transition:width .4s ease;width:0}
+.pbar-msg{font-size:12px;color:var(--mute);margin-top:8px;text-align:center}
+.arrived-card{background:var(--blk);border-radius:var(--r-lg);padding:20px;text-align:center;margin-bottom:12px}
+.arr-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.arr-emoji{font-size:40px}
+.arr-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff}
+.arr-sub{font-size:13px;color:#888;margin-top:3px}
+.btn-row2{display:flex;gap:10px}
+.btn-row2>*{flex:1}
+
+/* ══ DONE PAGE ══ */
+.done-wrap{padding:24px 16px}
+.done-top{text-align:center;padding:20px 0}
+.done-anim{font-size:64px;margin-bottom:12px}
+.done-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--blk)}
+.done-sub{font-size:14px;color:var(--mute);margin-top:5px}
+.rating-card{background:var(--card);border-radius:var(--r-lg);padding:20px;margin:16px 0;border:1.5px solid var(--border)}
+.rat-lbl{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--blk);margin-bottom:12px;text-align:center}
+.stars{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
+.star{font-size:36px;color:#DDD;cursor:pointer;transition:color .15s}
+.star.on{color:var(--y)}
+.review-inp{width:100%;padding:12px;border-radius:var(--r);border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;resize:none;height:80px;outline:none}
+.review-inp:focus{border-color:var(--y)}
+.done-stats-row{display:flex;gap:0;background:var(--card);border-radius:var(--r-lg);border:1.5px solid var(--border);overflow:hidden;margin-bottom:14px}
+.ds-item{flex:1;padding:14px;text-align:center}
+.ds-val{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--blk)}
+.ds-lbl{font-size:10px;color:var(--mute);margin-top:3px}
+.ds-div{width:1px;background:var(--border)}
+
+/* ══ BOTTOM NAV ══ */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--border);display:flex;align-items:center;padding:8px 0;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;transition:opacity .2s}
+.bn-icon{font-size:20px;line-height:1}
+.bn-lbl{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--mute);letter-spacing:.03em}
+.bn-item.active .bn-lbl{color:var(--blk)}
+.bnav-sos{flex:1;display:flex;justify-content:center;align-items:center;margin-top:-24px}
+.bnav-sos-btn{width:56px;height:56px;background:var(--y);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(255,193,7,.5);cursor:pointer;border:3px solid var(--card)}
+.bnav-sos-txt{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--blk);letter-spacing:.05em}
+</style>
+</head>
+<body>
+
+<!-- ╔═══════════════════╗
+     ║  SPLASH           ║
+     ╚═══════════════════╝ -->
+<div id="s-splash" class="screen active">
+<div class="splash">
+  <div class="splash-icon">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <line x1="4" y1="34" x2="24" y2="36" stroke="#FFC107" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+      <line x1="4" y1="41" x2="21" y2="42.5" stroke="#FFC107" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+      <line x1="5" y1="48" x2="20" y2="47" stroke="#FFC107" stroke-width="2.5" stroke-linecap="round" opacity=".45"/>
+      <path d="M52 12l-3-5h-6l-3 5a17 17 0 0 0-5 3l-6-1-3 5 4 5a17 17 0 0 0 0 5l-4 5 3 5 6-1a17 17 0 0 0 5 3l3 5h6l3-5a17 17 0 0 0 5-3l6 1 3-5-4-5a17 17 0 0 0 0-5l4-5-3-5-6 1a17 17 0 0 0-5-3z" fill="#FFC107"/>
+      <circle cx="46" cy="40" r="9" fill="#111"/>
+      <circle cx="46" cy="40" r="4" fill="#FFC107"/>
+      <rect x="26" y="48" width="28" height="7" rx="3.5" transform="rotate(45 40 51.5)" fill="#FFC107"/>
+      <circle cx="57" cy="24" r="7" fill="#FFC107"/>
+      <circle cx="57" cy="24" r="3.5" fill="#111"/>
+      <circle cx="29" cy="65" r="5" fill="#FFC107"/>
+    </svg>
+  </div>
+  <div class="splash-name">Quick<span>Buddy</span></div>
+  <div class="splash-tag">Fixing Your Ride, Anytime, Anywhere</div>
+  <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
+</div>
+</div>
+
+<!-- ╔═══════════════════╗
+     ║  AUTH             ║
+     ╚═══════════════════╝ -->
+<div id="s-auth" class="screen">
+<div class="auth-screen">
+  <div class="auth-top">
+    <div class="auth-logo-row">
+      <div class="auth-logo-box">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <line x1="4" y1="34" x2="24" y2="36" stroke="#FFC107" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+          <line x1="4" y1="41" x2="21" y2="42.5" stroke="#FFC107" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+          <line x1="5" y1="48" x2="20" y2="47" stroke="#FFC107" stroke-width="2.5" stroke-linecap="round" opacity=".45"/>
+          <path d="M52 12l-3-5h-6l-3 5a17 17 0 0 0-5 3l-6-1-3 5 4 5a17 17 0 0 0 0 5l-4 5 3 5 6-1a17 17 0 0 0 5 3l3 5h6l3-5a17 17 0 0 0 5-3l6 1 3-5-4-5a17 17 0 0 0 0-5l4-5-3-5-6 1a17 17 0 0 0-5-3z" fill="#FFC107"/>
+          <circle cx="46" cy="40" r="9" fill="#111"/>
+          <circle cx="46" cy="40" r="4" fill="#FFC107"/>
+          <rect x="26" y="48" width="28" height="7" rx="3.5" transform="rotate(45 40 51.5)" fill="#FFC107"/>
+          <circle cx="57" cy="24" r="7" fill="#FFC107"/>
+          <circle cx="57" cy="24" r="3.5" fill="#111"/>
+          <circle cx="29" cy="65" r="5" fill="#FFC107"/>
+        </svg>
+      </div>
+      <div>
+        <div class="auth-brand-big">Quick<span>Buddy</span></div>
+        <div class="auth-tagline-big">Fixing Your Ride, Anytime, Anywhere.</div>
+      </div>
+    </div>
+    <div class="trust-pills">
+      <div class="tp">⚡ Instant Help</div>
+      <div class="tp">📍 GPS Match</div>
+      <div class="tp">✅ Verified Mechanics</div>
+      <div class="tp">🔒 Safe & Secure</div>
+    </div>
+  </div>
+  <div class="auth-bottom">
+    <div class="auth-tab-row">
+      <button class="atab on" id="tab-l" onclick="switchTab('l')">Login</button>
+      <button class="atab" id="tab-r" onclick="switchTab('r')">Register</button>
+    </div>
+    <!-- LOGIN -->
+    <div id="f-l">
+      <div class="fgrp"><label>Phone or Email</label><input type="text" id="l-id" placeholder="Enter phone or email" oninput="chkL()"/></div>
+      <div class="fgrp"><label>Password</label><div class="pass-wrap"><input type="password" id="l-pw" placeholder="Enter password" oninput="chkL()"/><span class="eye" onclick="togPw('l-pw',this)">👁</span></div></div>
+      <div class="forgot">Forgot password?</div>
+      <button class="btn-y" id="btn-l" onclick="doLogin()" disabled>Login to QuickBuddy</button>
+      <div class="auth-or"><span>New here?</span><span class="alink" onclick="switchTab('r')">Create free account →</span></div>
+    </div>
+    <!-- REGISTER -->
+    <div id="f-r" style="display:none">
+      <div class="frow2">
+        <div class="fgrp"><label>First Name</label><input type="text" id="r-fn" placeholder="First" oninput="chkR()"/></div>
+        <div class="fgrp"><label>Last Name</label><input type="text" id="r-ln" placeholder="Last" oninput="chkR()"/></div>
+      </div>
+      <div class="fgrp"><label>Phone Number</label><input type="tel" id="r-ph" placeholder="10-digit mobile" maxlength="10" oninput="chkR()"/></div>
+      <div class="fgrp"><label>Email Address</label><input type="email" id="r-em" placeholder="you@email.com" oninput="chkR()"/></div>
+      <div class="fgrp"><label>Password</label><div class="pass-wrap"><input type="password" id="r-pw" placeholder="Min 6 characters" oninput="chkR()"/><span class="eye" onclick="togPw('r-pw',this)">👁</span></div></div>
+      <button class="btn-y" id="btn-r" onclick="doReg()" disabled>Create Account — Free</button>
+      <div class="auth-or"><span>Already registered?</span><span class="alink" onclick="switchTab('l')">Login →</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ╔═══════════════════╗
+     ║  MAIN APP         ║
+     ╚═══════════════════╝ -->
+<div id="s-app" class="screen">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-logo-box">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <line x1="4" y1="34" x2="24" y2="36" stroke="#111" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+          <line x1="4" y1="41" x2="21" y2="42.5" stroke="#111" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+          <line x1="5" y1="48" x2="20" y2="47" stroke="#111" stroke-width="2.5" stroke-linecap="round" opacity=".45"/>
+          <path d="M52 12l-3-5h-6l-3 5a17 17 0 0 0-5 3l-6-1-3 5 4 5a17 17 0 0 0 0 5l-4 5 3 5 6-1a17 17 0 0 0 5 3l3 5h6l3-5a17 17 0 0 0 5-3l6 1 3-5-4-5a17 17 0 0 0 0-5l4-5-3-5-6 1a17 17 0 0 0-5-3z" fill="#111"/>
+          <circle cx="46" cy="40" r="9" fill="#FFC107"/>
+          <circle cx="46" cy="40" r="4" fill="#111"/>
+          <rect x="26" y="48" width="28" height="7" rx="3.5" transform="rotate(45 40 51.5)" fill="#111"/>
+          <circle cx="57" cy="24" r="7" fill="#111"/>
+          <circle cx="57" cy="24" r="3.5" fill="#FFC107"/>
+          <circle cx="29" cy="65" r="5" fill="#111"/>
+        </svg>
+      </div>
+      <div>
+        <div class="tb-brand">Quick<span>Buddy</span></div>
+        <div class="tb-loc">📍 Ludhiana, Punjab</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <div class="notif-wrap" onclick="alert('No new notifications')">🔔<div class="notif-red"></div></div>
+      <div class="user-chip" onclick="togMenu()">
+        <div class="u-av" id="hdr-av">U</div>
+        <span class="u-name" id="hdr-nm">User</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DROPDOWN -->
+  <div class="drop-menu" id="dmenu">
+    <div class="drop-head">
+      <div class="dh-av" id="dm-av">U</div>
+      <div><div class="dh-name" id="dm-nm">User</div><div class="dh-ph" id="dm-ph">+91 XXXXXXXXXX</div></div>
+    </div>
+    <div class="di" onclick="closeMnu()">👤 My Profile</div>
+    <div class="di" onclick="closeMnu()">📋 Booking History</div>
+    <div class="di" onclick="closeMnu()">💬 Support</div>
+    <div class="di" onclick="closeMnu()">⭐ Rate App</div>
+    <div class="di" onclick="closeMnu()">⚙️ Settings</div>
+    <div class="drop-sep"></div>
+    <div class="di red" onclick="doLogout()">🚪 Logout</div>
+  </div>
+
+  <!-- ── HOME PAGE ── -->
+  <div id="p-home" class="page active">
+    <div class="greet-bar">
+      <div><div class="greet-hi">Hey <span id="g-name">User</span> 👋</div><div class="greet-sub">Need roadside help? We're here 24/7</div></div>
+      <div class="greet-clock" id="g-clk">--:--</div>
+    </div>
+
+    <!-- SOS -->
+    <div class="sos-hero">
+      <div class="sos-ring-1">
+        <div class="sos-ring-2"></div>
+        <button class="sos-big-btn" id="sos-btn" onclick="goFind()">
+          <div class="sos-icon-txt">🆘</div>
+          <div class="sos-lbl">SOS</div>
+          <div class="sos-sublbl">Find mechanics</div>
+        </button>
+      </div>
+      <div class="sos-desc">Emergency roadside assistance</div>
+      <div class="sos-hint-txt">Tap SOS — mechanic reaches you in ~15 min</div>
+    </div>
+
+    <!-- VEHICLE TYPE -->
+    <div class="sec-head"><div class="sec-t">Your Vehicle</div><span class="sec-lnk">Edit</span></div>
+    <div class="v-strip">
+      <div class="vtile sel-v" onclick="pickV(this,'Bike')"><div class="vt-img">🏍️</div><div class="vt-name">Bike</div></div>
+      <div class="vtile" onclick="pickV(this,'Car')"><div class="vt-img">🚗</div><div class="vt-name">Car</div></div>
+      <div class="vtile" onclick="pickV(this,'EV Scooter')"><div class="vt-img">⚡</div><div class="vt-name">EV</div></div>
+      <div class="vtile" onclick="pickV(this,'Scooter')"><div class="vt-img">🛵</div><div class="vt-name">Scooter</div></div>
+      <div class="vtile" onclick="pickV(this,'Truck')"><div class="vt-img">🚛</div><div class="vt-name">Truck</div></div>
+      <div class="vtile" onclick="pickV(this,'Auto')"><div class="vt-img">🛺</div><div class="vt-name">Auto</div></div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="sec-head"><div class="sec-t">Our Services</div><span class="sec-lnk">See all</span></div>
+    <div class="svc-grid">
+      <div class="svc-card" onclick="pickSvc('Puncture / Tyre',this)"><div class="svc-emoji">🔧</div><div class="svc-name">Puncture / Tyre</div><div class="svc-price">₹150+</div></div>
+      <div class="svc-card" onclick="pickSvc('Battery Issue',this)"><div class="svc-emoji">🔋</div><div class="svc-name">Battery Issue</div><div class="svc-price">₹200+</div></div>
+      <div class="svc-card" onclick="pickSvc('Engine Repair',this)"><div class="svc-emoji">⚙️</div><div class="svc-name">Engine Repair</div><div class="svc-price">₹300+</div></div>
+      <div class="svc-card" onclick="pickSvc('Fuel Delivery',this)"><div class="svc-emoji">⛽</div><div class="svc-name">Fuel Delivery</div><div class="svc-price">₹100+</div></div>
+      <div class="svc-card" onclick="pickSvc('Towing',this)"><div class="svc-emoji">🚜</div><div class="svc-name">Towing</div><div class="svc-price">₹500+</div></div>
+      <div class="svc-card" onclick="pickSvc('Chain / Belt',this)"><div class="svc-emoji">🔗</div><div class="svc-name">Chain / Belt</div><div class="svc-price">₹100+</div></div>
+      <div class="svc-card" onclick="pickSvc('Electrical',this)"><div class="svc-emoji">💡</div><div class="svc-name">Electrical</div><div class="svc-price">₹200+</div></div>
+      <div class="svc-card" onclick="pickSvc('Checkup',this)"><div class="svc-emoji">🩺</div><div class="svc-name">Checkup</div><div class="svc-price">₹99+</div></div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="sec-head"><div class="sec-t">How It Works</div></div>
+    <div class="how-wrap">
+      <div class="how-step"><div class="how-num">1</div><div class="how-emoji">📍</div><div class="how-txt">Share Location</div></div>
+      <div class="how-line"></div>
+      <div class="how-step"><div class="how-num">2</div><div class="how-emoji">🔍</div><div class="how-txt">Find Mechanic</div></div>
+      <div class="how-line"></div>
+      <div class="how-step"><div class="how-num">3</div><div class="how-emoji">🔧</div><div class="how-txt">Get Fixed</div></div>
+      <div class="how-line"></div>
+      <div class="how-step"><div class="how-num">4</div><div class="how-emoji">💳</div><div class="how-txt">Pay & Rate</div></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="st-item"><div class="st-val">2,400+</div><div class="st-lbl">Mechanics</div></div>
+      <div class="st-div"></div>
+      <div class="st-item"><div class="st-val">~15 min</div><div class="st-lbl">Avg Response</div></div>
+      <div class="st-div"></div>
+      <div class="st-item"><div class="st-val">4.8 ⭐</div><div class="st-lbl">Avg Rating</div></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- ── SEARCH PAGE ── -->
+  <div id="p-search" class="page" style="display:none">
+    <div class="page-hdr">
+      <button class="back-btn" onclick="goPage('p-home')">←</button>
+      <div class="ph-title">Nearby Mechanics</div>
+      <div class="ph-badge">3 found</div>
+    </div>
+    <div class="search-map">
+      <div class="map-dark-bg"></div>
+      <div class="map-rd" style="top:55%;width:100%;height:3px"></div>
+      <div class="map-rd" style="left:42%;height:100%;width:3px"></div>
+      <div class="map-pulse-ring"></div>
+      <div class="map-you">YOU</div>
+      <div class="map-mp" style="top:22%;left:18%">M1</div>
+      <div class="map-mp" style="bottom:26%;right:16%">M2</div>
+      <div class="map-mp" style="top:28%;right:22%">M3</div>
+      <div class="map-lbl-txt">📍 GT Road, Ludhiana</div>
+    </div>
+    <div class="s-body">
+      <div class="prob-bar">
+        <span class="pb-label">Problem:</span>
+        <span class="pb-val" id="pb-v">Not selected</span>
+        <span class="pb-change" onclick="goPage('p-home')">Change</span>
+      </div>
+      <div class="mlist-label">Verified mechanics near you</div>
+      <div class="mc" onclick="pickMech('Ramesh Singh','RS','av-1','EV & Scooter Specialist','4.8','142','1.2 km','~6 min','₹300')">
+        <div class="mc-av av-1">RS</div>
+        <div class="mc-info">
+          <div class="mc-name">Ramesh Singh</div>
+          <div class="mc-spec">⚡ EV & Scooter Specialist</div>
+          <div class="mc-tags">
+            <span class="mc-tag tag-rat">⭐ 4.8</span>
+            <span class="mc-tag tag-ver">✅ Verified</span>
+            <span class="mc-tag tag-job">142 jobs</span>
+          </div>
+        </div>
+        <div class="mc-right"><div class="mc-dist">1.2 km</div><div class="mc-eta">~6 min</div><div class="mc-price">From ₹300</div></div>
+      </div>
+      <div class="mc" onclick="pickMech('Arjun Kumar','AK','av-2','General Mechanic','4.5','89','2.4 km','~11 min','₹200')">
+        <div class="mc-av av-2">AK</div>
+        <div class="mc-info">
+          <div class="mc-name">Arjun Kumar</div>
+          <div class="mc-spec">🔧 General Mechanic</div>
+          <div class="mc-tags">
+            <span class="mc-tag tag-rat">⭐ 4.5</span>
+            <span class="mc-tag tag-ver">✅ Verified</span>
+            <span class="mc-tag tag-job">89 jobs</span>
+          </div>
+        </div>
+        <div class="mc-right"><div class="mc-dist">2.4 km</div><div class="mc-eta">~11 min</div><div class="mc-price">From ₹200</div></div>
+      </div>
+      <div class="mc" onclick="pickMech('Pawan Verma','PV','av-3','Bike Expert','4.6','203','3.0 km','~14 min','₹150')">
+        <div class="mc-av av-3">PV</div>
+        <div class="mc-info">
+          <div class="mc-name">Pawan Verma</div>
+          <div class="mc-spec">🏍️ Bike & Puncture Expert</div>
+          <div class="mc-tags">
+            <span class="mc-tag tag-rat">⭐ 4.6</span>
+            <span class="mc-tag tag-ver">✅ Verified</span>
+            <span class="mc-tag tag-job">203 jobs</span>
+          </div>
+        </div>
+        <div class="mc-right"><div class="mc-dist">3.0 km</div><div class="mc-eta">~14 min</div><div class="mc-price">From ₹150</div></div>
+      </div>
+      <div class="only-note">🔒 Only QuickBuddy Partner-registered mechanics shown</div>
+    </div>
+  </div>
+
+  <!-- ── TRACKING PAGE ── -->
+  <div id="p-track" class="page" style="display:none">
+    <div class="track-top">
+      <div class="tr-status-row">
+        <div class="tr-pulse"></div>
+        <span class="tr-status-txt" id="tr-stxt">Mechanic On The Way</span>
+      </div>
+      <div class="tr-map">
+        <div class="map-dark-bg"></div>
+        <div class="map-rd" style="top:55%;width:100%;height:2px"></div>
+        <div class="map-rd" style="left:55%;height:100%;width:2px"></div>
+        <div class="tr-you">YOU</div>
+        <div class="tr-mpin" id="mpin" style="left:15%;top:20%">M</div>
+      </div>
+    </div>
+    <div class="tr-body">
+      <div class="tr-mech-row">
+        <div class="mc-av av-1" id="tr-av">RS</div>
+        <div class="tr-info">
+          <div class="tr-mname" id="tr-nm">Ramesh Singh</div>
+          <div class="tr-mspec" id="tr-sp">EV Specialist · ✅ Verified</div>
+          <div class="tr-eta-row">
+            <span class="tr-eta-lbl">ETA</span>
+            <span class="tr-eta-val" id="tr-eta">~6 min</span>
+          </div>
+        </div>
+        <div class="tr-call" onclick="alert('Calling mechanic...')">📞</div>
+      </div>
+      <div class="pbar-outer">
+        <div class="pbar-top-row">
+          <span class="pbar-lbl">Mechanic progress</span>
+          <span class="pbar-pct" id="tr-pct">0%</span>
+        </div>
+        <div class="pbar"><div class="pbar-fill" id="tr-fill"></div></div>
+        <div class="pbar-msg" id="tr-msg">Request accepted. Mechanic heading your way...</div>
+      </div>
+      <div id="tr-arr" style="display:none">
+        <div class="arrived-card">
+          <div class="arr-top">
+            <div class="arr-emoji">🛠️</div>
+            <div><div class="arr-title">Mechanic Arrived!</div><div class="arr-sub">Your problem is being fixed</div></div>
+          </div>
+          <div class="btn-row2">
+            <button class="btn-y" onclick="jobDone()">Pay & Rate ⭐</button>
+            <button class="btn-outline" onclick="goPage('p-home')">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DONE PAGE ── -->
+  <div id="p-done" class="page" style="display:none">
+    <div class="done-wrap">
+      <div class="done-top">
+        <div class="done-anim">✅</div>
+        <div class="done-title">Job Complete!</div>
+        <div class="done-sub">Your vehicle is back on the road 🚀</div>
+      </div>
+      <div class="rating-card">
+        <div class="rat-lbl">Rate <span id="r-nm">Ramesh Singh</span></div>
+        <div class="stars" id="stars-row">
+          <span class="star" onclick="rateStar(1)">★</span>
+          <span class="star" onclick="rateStar(2)">★</span>
+          <span class="star" onclick="rateStar(3)">★</span>
+          <span class="star" onclick="rateStar(4)">★</span>
+          <span class="star" onclick="rateStar(5)">★</span>
+        </div>
+        <textarea class="review-inp" placeholder="Leave a comment (optional)..."></textarea>
+        <button class="btn-y" onclick="submitRat()" style="margin-top:10px">Submit Rating</button>
+      </div>
+      <div class="done-stats-row">
+        <div class="ds-item"><div class="ds-val" id="ds-prob">Problem</div><div class="ds-lbl">Service</div></div>
+        <div class="ds-div"></div>
+        <div class="ds-item"><div class="ds-val">₹450</div><div class="ds-lbl">Amount Paid</div></div>
+        <div class="ds-div"></div>
+        <div class="ds-item"><div class="ds-val" id="ds-veh">Bike</div><div class="ds-lbl">Vehicle</div></div>
+      </div>
+      <button class="btn-outline" onclick="goPage('p-home')" style="width:100%;margin-top:14px">Back to Home</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <div class="bn-item active" onclick="bnav(this,'p-home')"><div class="bn-icon">🏠</div><div class="bn-lbl">Home</div></div>
+    <div class="bn-item" onclick="bnav(this,'p-search')"><div class="bn-icon">🔍</div><div class="bn-lbl">Find</div></div>
+    <div class="bnav-sos" onclick="goFind()"><div class="bnav-sos-btn"><div class="bnav-sos-txt">SOS</div></div></div>
+    <div class="bn-item" onclick="bnav(this,null)"><div class="bn-icon">📋</div><div class="bn-lbl">History</div></div>
+    <div class="bn-item" onclick="bnav(this,null)"><div class="bn-icon">👤</div><div class="bn-lbl">Profile</div></div>
+  </div>
+</div><!-- end s-app -->
+
+<script>
+var U={name:'User',init:'U',phone:''};
+var prob='Battery Dead',veh='Bike',trackT=null;
+
+/* Clock */
+function tick(){var d=new Date(),h=d.getHours(),m=d.getMinutes(),ap=h>=12?'PM':'AM';h=h%12||12;var s=h+':'+(m<10?'0':'')+m+' '+ap;var el=document.getElementById('g-clk');if(el)el.textContent=s;}
+tick();setInterval(tick,1000);
+
+/* Splash */
+setTimeout(function(){var sv=localStorage.getItem('qb_u');if(sv){U=JSON.parse(sv);enterApp();}else showScr('s-auth');},2300);
+
+function showScr(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+function goPage(id){document.querySelectorAll('.page').forEach(function(p){p.style.display='none';p.classList.remove('active');});document.getElementById(id).style.display='block';document.getElementById(id).classList.add('active');}
+
+/* Auth tabs */
+function switchTab(t){
+  document.getElementById('tab-l').classList.toggle('on',t==='l');
+  document.getElementById('tab-r').classList.toggle('on',t==='r');
+  document.getElementById('f-l').style.display=t==='l'?'':'none';
+  document.getElementById('f-r').style.display=t==='r'?'':'none';
+}
+function togPw(id,el){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password';el.textContent=i.type==='password'?'👁':'🙈';}
+function chkL(){var u=document.getElementById('l-id').value.trim(),p=document.getElementById('l-pw').value.trim();document.getElementById('btn-l').disabled=!(u.length>2&&p.length>=4);}
+function chkR(){var fn=document.getElementById('r-fn').value.trim(),ph=document.getElementById('r-ph').value.trim(),em=document.getElementById('r-em').value.trim(),pw=document.getElementById('r-pw').value.trim();document.getElementById('btn-r').disabled=!(fn.length>1&&ph.length===10&&em.includes('@')&&pw.length>=6);}
+
+function doLogin(){var u=document.getElementById('l-id').value.trim();var sv=localStorage.getItem('qb_u');U=sv?JSON.parse(sv):{name:u.split('@')[0],init:u[0].toUpperCase(),phone:u};enterApp();}
+function doReg(){var fn=document.getElementById('r-fn').value.trim(),ln=document.getElementById('r-ln').value.trim(),ph=document.getElementById('r-ph').value.trim();U={name:fn+(ln?' '+ln:''),init:fn[0].toUpperCase()+(ln?ln[0].toUpperCase():''),phone:'+91 '+ph};localStorage.setItem('qb_u',JSON.stringify(U));enterApp();}
+
+function enterApp(){
+  showScr('s-app');goPage('p-home');
+  var fn=U.name.split(' ')[0];
+  document.getElementById('hdr-av').textContent=U.init;
+  document.getElementById('hdr-nm').textContent=fn;
+  document.getElementById('dm-av').textContent=U.init;
+  document.getElementById('dm-nm').textContent=U.name;
+  document.getElementById('dm-ph').textContent=U.phone||'User';
+  document.getElementById('g-name').textContent=fn;
+}
+function doLogout(){closeMnu();localStorage.removeItem('qb_u');localStorage.removeItem('qb_req');showScr('s-auth');}
+
+/* Dropdown */
+function togMenu(){document.getElementById('dmenu').classList.toggle('open');}
+function closeMnu(){document.getElementById('dmenu').classList.remove('open');}
+document.addEventListener('click',function(e){if(!e.target.closest('.user-chip')&&!e.target.closest('.drop-menu'))closeMnu();});
+
+/* Vehicle & Service */
+function pickV(el,v){document.querySelectorAll('.vtile').forEach(function(t){t.classList.remove('sel-v');});el.classList.add('sel-v');veh=v;}
+function pickSvc(nm,el){document.querySelectorAll('.svc-card').forEach(function(c){c.classList.remove('sel-svc');});el.classList.add('sel-svc');prob=nm;goFind();}
+
+/* Navigation */
+function bnav(el,pg){document.querySelectorAll('.bn-item').forEach(function(b){b.classList.remove('active');});el.classList.add('active');if(pg)goPage(pg);}
+function goFind(){document.getElementById('pb-v').textContent=prob;goPage('p-search');}
+
+/* Mechanic select */
+function pickMech(nm,init,avc,spec,rat,jobs,dist,eta,price){
+  document.getElementById('tr-av').textContent=init;
+  document.getElementById('tr-av').className='mc-av '+avc;
+  document.getElementById('tr-nm').textContent=nm;
+  document.getElementById('tr-sp').textContent=spec+' · ✅ Verified';
+  document.getElementById('tr-eta').textContent=eta;
+  document.getElementById('r-nm').textContent=nm;
+  document.getElementById('tr-fill').style.width='0%';
+  document.getElementById('tr-pct').textContent='0%';
+  document.getElementById('tr-arr').style.display='none';
+  document.getElementById('tr-stxt').textContent='Mechanic On The Way';
+  document.getElementById('mpin').style.left='15%';
+  document.getElementById('mpin').style.top='20%';
+  localStorage.setItem('qb_req',JSON.stringify({problem:prob,vehicle:veh,location:'GT Road, Ludhiana',time:new Date().toLocaleTimeString(),status:'pending',user:U.name}));
+  goPage('p-track');
+  startTrack();
+}
+
+function startTrack(){
+  clearInterval(trackT);
+  var pct=0;
+  var msgs=['Request accepted. Mechanic heading your way...','Mechanic is 1 km away — almost there!','Mechanic is just 500m away!','Mechanic has arrived! 🎉'];
+  var etas=['~12 min','~8 min','~3 min','Arrived ✅'];
+  var pin=document.getElementById('mpin');
+  trackT=setInterval(function(){
+    pct=Math.min(pct+3,100);
+    var step=Math.min(Math.floor(pct/25),3);
+    document.getElementById('tr-fill').style.width=pct+'%';
+    document.getElementById('tr-pct').textContent=pct+'%';
+    document.getElementById('tr-msg').textContent=msgs[step];
+    document.getElementById('tr-eta').textContent=etas[step];
+    pin.style.left=(15+pct*0.3)+'%';
+    pin.style.top=(20+pct*0.2)+'%';
+    if(pct>=100){clearInterval(trackT);document.getElementById('tr-arr').style.display='block';document.getElementById('tr-stxt').textContent='Mechanic Arrived!';}
+  },280);
+}
+
+function jobDone(){
+  clearInterval(trackT);
+  document.getElementById('ds-prob').textContent=prob;
+  document.getElementById('ds-veh').textContent=veh;
+  localStorage.setItem('qb_req',JSON.stringify({status:'completed'}));
+  goPage('p-done');
+}
+
+function rateStar(n){document.querySelectorAll('.star').forEach(function(s,i){s.classList.toggle('on',i<n);});}
+function submitRat(){alert('Thank you for rating! 🙏');goPage('p-home');}
+</script>
+</body>
+</html>

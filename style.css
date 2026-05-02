@@ -1,0 +1,271 @@
+/* ===============================
+   GLOBAL RESET
+================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===============================
+   ROOT VARIABLES (MERGED)
+================================ */
+:root {
+  /* Primary Colors */
+  --yellow: #FFC107;
+  --yellow-dark: #FFB300;
+  --yellow-light: #FFF8E1;
+
+  --green: #00C97B;
+  --green-dark: #00A865;
+  --green-light: #E6FBF2;
+
+  --black: #111;
+  --black-2: #1E1E1E;
+  --black-3: #2C2C2C;
+
+  --red: #FF4444;
+  --red-light: #FFF0F0;
+
+  --bg: #F6F7F9;
+  --card: #fff;
+  --border: #EBEBEB;
+  --mute: #888;
+
+  --radius: 14px;
+  --radius-lg: 20px;
+}
+
+/* ===============================
+   BODY
+================================ */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--black);
+  max-width: 430px;
+  margin: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+/* ===============================
+   ANIMATIONS
+================================ */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   SCREEN SYSTEM
+================================ */
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+  animation: fadeUp .3s ease;
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-yellow {
+  background: var(--yellow);
+  color: var(--black);
+  box-shadow: 0 6px 20px rgba(255,193,7,.3);
+}
+
+.btn-green {
+  background: var(--green);
+  color: white;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+}
+
+/* ===============================
+   INPUTS
+================================ */
+.input-group {
+  margin-bottom: 14px;
+}
+
+.input-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: var(--yellow);
+}
+
+/* ===============================
+   SPLASH (COMMON)
+================================ */
+.splash {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash.yellow {
+  background: var(--yellow);
+}
+
+.splash.green {
+  background: var(--green);
+}
+
+/* ===============================
+   TOPBAR
+================================ */
+.topbar {
+  background: var(--black);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.tb-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tb-logo.yellow {
+  background: var(--yellow);
+}
+
+.tb-logo.green {
+  background: var(--green);
+}
+
+/* ===============================
+   CARD SYSTEM
+================================ */
+.card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+/* ===============================
+   SERVICE GRID
+================================ */
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.service {
+  text-align: center;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.service:hover {
+  background: var(--yellow-light);
+  border-color: var(--yellow);
+}
+
+/* ===============================
+   BOTTOM NAV
+================================ */
+.bnav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 430px;
+  background: white;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+}
+
+.bn-item {
+  text-align: center;
+  font-size: 11px;
+  padding: 6px;
+}
+
+/* ===============================
+   MECHANIC CARD
+================================ */
+.mechanic-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: white;
+}
+
+.mechanic-card:hover {
+  border-color: var(--yellow);
+}
+
+/* ===============================
+   STATUS TAGS
+================================ */
+.tag {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.tag-green {
+  background: var(--green-light);
+  color: #00875A;
+}
+
+.tag-yellow {
+  background: var(--yellow-light);
+  color: #7A5300;
+}
